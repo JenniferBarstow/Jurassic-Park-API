@@ -17,9 +17,12 @@ A Rails 6 API with the following features:
   - JSON formatted RESTful API 
   - Filtering Dinosaurs by species name
   - Filtering Dinosaurs by cage name
+  - Filtering Cages by power status
   - Data persisted with PostgreSQL
   - Custom validation for making sure Carnivores and herbivore are not in the same cage separation
   - Custom validation for making sure Carnivores are only in a cage with their own Species
+  - Custom validation for making sure Dinosaurs cannot be moved into a cage that is powered down
+  - Custom validation for making sure Cages cannot be powered off if they contain dinosaurs
   - Setting the diet so that it is in sync with that of it's Species
   - Custom validation tests
   - Model method tests
@@ -34,6 +37,7 @@ Filtering availale for both the `/dinosaurs`
 ### Filtering Queries
 - /Api/V1/dinosaurs{?species=Tyrannosaurus}| dinosaurs#index |  ( Filter all of the dinosaurs by species name)
 - /Api/V1/dinosaurs{?cage=Tough Guys}| dinosaurs#index |   ( Filter all of the dinosaurs by cage name)
+- /Api/V1/cages?{cage=active}| cages#index |   ( Filter cages by power status of "active" or "down")
 
 
 
@@ -61,9 +65,13 @@ Filtering availale for both the `/dinosaurs`
 
 ##### Example response for: /Api/v1/cages
 
+<img width="403" alt="Screen Shot 2023-04-09 at 3 06 47 PM" src="https://user-images.githubusercontent.com/9825044/230796531-9567c480-ed42-4651-b764-d3be326a083f.png">
 
 
 ##### Example response for: /Api/v1/dinosaurs?species=Tyrannosaurus
+
+<img width="337" alt="Screen Shot 2023-04-09 at 3 07 58 PM" src="https://user-images.githubusercontent.com/9825044/230796568-ed1f7aaf-68d8-42d4-92ef-5118cdbc8cc5.png">
+
 
 ### Things I would add if more time was permitted
   - Pagination 
