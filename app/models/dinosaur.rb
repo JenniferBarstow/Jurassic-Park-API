@@ -8,6 +8,13 @@ class Dinosaur < ApplicationRecord
 
   before_save :set_diet
 
+  validate :cage_power_status_check
+
+  def cage_power_status_check
+    c = Cage.find(cage_id)
+    errors.add(:cage_id, "cannot contain dinosaurs when power is down") if c.present? && c.power_status == 'down'
+  end
+
   def set_diet
     self.diet = species.diet
   end

@@ -3,7 +3,7 @@ class Api::V1::CagesController < ApplicationController
   def index
     @cages = Cage.all
     render json: @cages.as_json(
-      only: [:id, :name],
+      only: [:id, :name, :power_status],
       include: { dinosaurs: { only: [:name, :diet],
       include: { species: { only: [:name, :diet]} } } }
     ), status: :ok
@@ -21,7 +21,7 @@ class Api::V1::CagesController < ApplicationController
   def show
     @cage = Cage.find(params[:id])
     render json: @cage.as_json(
-      only: [:id, :name],
+      only: [:id, :name, :power_status],
       include: { dinosaurs: { only: [:name, :diet],
       include: { species: { only: [:name, :diet]} } } }
     ), status: :ok
@@ -45,6 +45,6 @@ class Api::V1::CagesController < ApplicationController
   private
     
   def cage_params
-    params.require(:cage).permit(:name)
+    params.require(:cage).permit(:name, :power_status)
   end    
 end

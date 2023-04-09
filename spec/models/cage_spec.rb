@@ -1,6 +1,28 @@
 require 'rails_helper'
 
 RSpec.describe Cage, type: :model do
+
+  describe "validations" do
+
+    context "when dinosaurs are present" do
+      it "does not allow a cage to be powered down" do
+        cage = Cage.create(name: "Cage 1", power_status: "active")
+        species = Species.create(name: "Tyrannosaurus Rex", diet: "carnivore")
+        Dinosaur.create(name: "T-Rex", species: species, diet: "carnivore", cage: cage )
+        cage.update(power_status: "down")
+        expect(cage.errors[:cage_id]).to include("cannot be powered down when it contains dinosaurs")
+      end
+    end
+
+    context "a cage without dinosaurs" do
+      it "allows cage to be powered down" do
+        cage = Cage.create(name: "Cage 1", power_status: "active")
+        cage.update(power_status: "down")
+        expect(cage.errors[:cage_id]).to be_empty
+      end
+    end
+  end
+
   describe  "#carnivore_cage_species" do
 
     context "when the cage has no dinosaurs" do

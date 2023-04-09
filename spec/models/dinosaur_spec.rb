@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Dinosaur, type: :model do
 
   before(:each) do
-    @cage = Cage.create(name: "Cage1")
+    @cage = Cage.create(name: "Cage1", power_status: "active")
     @cage_2 = Cage.create(name: "Cage2")
     @herbivore_species = Species.create(name: "Stegosaurus", diet: "herbivore")
     @carnivore_species = Species.create(name: "Tyrannosaurus Rex", diet: "carnivore")
@@ -44,6 +44,22 @@ RSpec.describe Dinosaur, type: :model do
         dino1 = Dinosaur.create(name: "Rex1", species: @carnivore_species, cage: @cage, diet: "carnivore")
         dino2 = Dinosaur.create(name: "Rex2", species: @carnivore_species, cage: @cage, diet: "carnivore")
         expect(dino1.errors[:cage_id]).to eq([])
+      end
+    end
+
+    context "when a cage is powered down" do
+      it "does not allow the dinosaur to belong to the cage" do
+        @cage.update(power_status: "down")
+        dinosaur = Dinosaur.create(name: "T-Rex", species: @carnivore_species, cage: @cage, diet: "carnivore" )
+        expect(dinosaur.errors[:cage_id]).to include("cannot contain dinosaurs when power is down")
+      end
+    end
+
+    context "when cage gas power status of active" do
+      it "allows a dinosaur to be put in cage" do
+        dinosaur = Dinosaur.create(name: "T-Rex", species: @carnivore_species, diet: "carnivore", cage_id: @cage.id)
+        expect(@cage.dinosaurs.count).to eq(1)
+        expect(dinosaur.errors[:cage_id]).to be_empty
       end
     end
   end
