@@ -1,5 +1,42 @@
 require 'rails_helper'
 
+
+require 'rails_helper'
+
 RSpec.describe Dinosaur, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  before(:each) do
+    @cage = Cage.create(name: "Cage1")
+    @cage_2 = Cage.create(name: "Cage2")
+    @herbivore_species = Species.create(name: "Stegosaurus", diet: "herbivore")
+    @carnivore_species = Species.create(name: "Tyrannosaurus Rex", diet: "carnivore")
+    @carnivore_2_species = Species.create(name: "Velociraptor", diet: "carnivore")
+  end
+
+  describe "#validations" do
+
+    context "when the dinosaur name is not present" do
+      it "returns an error" do
+        dino = Dinosaur.create(species: @herbivore_species, cage: @cage, diet: "herbivore")
+        expect(dino.errors[:name]).to include("can't be blank")
+      end
+    end
+  end
+
+  describe "#set_diet" do
+    context "when the dinosaur species is carnivorous" do
+      it "sets the dinosaur diet to carnivore" do
+        dino = Dinosaur.create(name: "Dino1", species: @carnivore_species, cage: @cage, diet: "diet that doesnt match species diet")
+        expect(dino.reload.diet).to eq("carnivore")
+      end
+    end
+
+    context "when the dinosaur species is herbivorous" do
+      it "sets the dinosaur diet to herbivore" do
+        dino = Dinosaur.create(name: "Trina", species: @herbivore_species, cage: @cage, diet: "diet that doesnt match species diet")
+        expect(dino.reload.diet).to eq("herbivore")
+      end
+    end
+  end
 end
+
