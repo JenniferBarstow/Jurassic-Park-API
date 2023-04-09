@@ -2,7 +2,11 @@ class Api::V1::CagesController < ApplicationController
 
   def index
     @cages = Cage.all
-    render json: @cages, status: :ok
+    render json: @cages.as_json(
+      only: [:id, :name],
+      include: { dinosaurs: { only: [:name, :diet],
+      include: { species: { only: [:name, :diet]} } } }
+    ), status: :ok
   end
 
   def create
@@ -16,7 +20,11 @@ class Api::V1::CagesController < ApplicationController
 
   def show
     @cage = Cage.find(params[:id])
-    render json: @cage, status: :ok
+    render json: @cage.as_json(
+      only: [:id, :name],
+      include: { dinosaurs: { only: [:name, :diet],
+      include: { species: { only: [:name, :diet]} } } }
+    ), status: :ok
   end
     
   def update
