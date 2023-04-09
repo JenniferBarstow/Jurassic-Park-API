@@ -6,4 +6,9 @@ class Cage < ApplicationRecord
     return true if dinosaurs.empty?
     dinosaurs.all?(&:carnivore?)
   end
+
+  def carnivore_cage_species
+    return [] if dinosaurs.empty?
+    dinosaurs.any? { |dinosaur| dinosaur.carnivore? } && dinosaurs.map(&:species).pluck(:name).uniq.join(',') 
+  end
 end
